@@ -1,6 +1,7 @@
 # Freevolumecode
 Calculation of free volume using hard sphere probe technique. This code was used in 10.1039/D1SM01825F and was written aroun 2018. 
-This uses a linked cell framework and is implemented using linked lists in C programming language. Unfortunately I did not have time to format the code but works. 
+This uses a linked cell framework and is implemented using linked lists in C programming language. 
+Unfortunately I did not have time to format the code but works. 
 
 
    
@@ -39,5 +40,5 @@ The output is 8 columns
 7. Number of cubic free cells
 8. Total number of cells
 
-The code can also output x,y,z coordinates but I have supressed it. 
+The code can also output x,y,z coordinates of the centers of the free volume cubelets but I have supressed it. 
 
