@@ -1,0 +1,29 @@
+pair_coeff 1 1 lj/cut/coul/long 0.1094 3.39966950842
+pair_coeff 2 2 lj/cut/coul/long 0.0157 2.64953278775 
+pair_coeff 3 3 lj/cut/coul/long 0.0860 3.39966950842
+pair_coeff 4 4 lj/cut/coul/long 0.0150 2.59964245953
+pair_coeff 5 5 lj/cut/coul/long 0.1700 3.00001234347
+pair_coeff 6 6 lj/cut/coul/long 0.0157 2.47135304412 
+pair_coeff 7 7 lj/cut/coul/long 0.2104 3.06647338784
+pair_coeff 8 8 lj/cut/coul/long 0.0000 0.0    
+pair_coeff 9 9 lj/cut/coul/long 0.1700 3.24999852378
+pair_coeff 10 10 lj/cut/coul/long 0.0157 1.06907846177 
+pair_coeff 11 11 lj/cut/coul/long 0.1700 3.24999852378
+pair_coeff 12 12 lj/cut/coul/long 0.2100 2.95992190115
+pair_coeff 13 13 lj/cut/coul/long 0.0860 3.39966950842  
+pair_coeff 14 14 lj/cut/coul/long 0.1094 3.39966950842 
+pair_coeff 15 15 lj/cut/coul/long  0.1700 3.24999852378
+pair_coeff 16 16 lj/cut/coul/long  0.1700 3.24999852378 #This atom is not taking part in the simualtion
+#--------------------------------------------------------
+#Contains secondary amines, tertiary amines formed from reaction of primary amines and tertiary amines formed from secondary amines already present in 
+#system
+pair_coeff 17 17 lj/cut/coul/long  0.1700 3.24999852378 
+#---------------------------------------------------------
+pair_coeff 18 18 lj/cut/coul/long  0.1700 3.24999852378 #Tertiary amine formed after reaction of secondary amine (which is formed after conversion of primary amines)
+pair_coeff 19 19 lj/cut/coul/long  0.1700 3.24999852378 #Tertiary amine formed after reaction of secondary amine (that is already present in the system)
+pair_coeff 20 20 lj/cut/coul/long 0.1094 3.39966950842  # change of type for carbon after reaction
+
+
+
+
+                           

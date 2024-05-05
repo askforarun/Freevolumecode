@@ -1,0 +1,10 @@
+typedef struct {
+	
+	double *x;
+	double *y;
+	double *z;
+	double *q;
+        double natoms;
+        double *eps;
+        double *sigma;
+} Atom;

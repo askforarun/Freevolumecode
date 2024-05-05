@@ -1,0 +1,96 @@
+#include "stdheader.h"
+#include "Atom.h"
+#include "getboxdim.h"
+#include "particle.h"
+#include "sortatomscell.h"
+
+
+double diffenergy(Box box,Atom **atom, int natoms, double rc, double x, double y, double z,double rprobe)
+{
+
+int Nx=0, Ny=0,Nz=0;
+double delx=0,dely=0,delz=0,dx=0,dy=0,dz=0,dxs=0,dys=0,dzs=0,d=0,dtemp=0;
+double eps=0.0001;
+Cell **cell;
+Cell *head;
+int cx = 0, cy = 0, cz = 0, l=0, m=0, n=0, lp=0, mp=0, np=0,c=0,count=0,occ=0,occtemp=0;
+
+                                     Nx = Nx(box.xhi,box.xlo,rc);
+	                             Ny = Ny(box.yhi,box.ylo,rc);
+	                             Nz = Nz(box.zhi,box.zlo,rc);
+
+ 	                             delx = delx(box.xhi,box.xlo,Nx);
+	                             dely = dely(box.yhi,box.ylo,Ny);
+	                             delz = delz(box.zhi, box.zlo,Nz);		
+                                        cx = ceil((x - box.xlo) / delx);
+					cy = ceil((y - box.ylo) / dely);
+					cz = ceil((z - box.zlo) / delz);
+	                                printf("%lf %lf %lf\n",delx,dely,delz);         
+           cell = sortatomscell(atom, natoms, box, Nx, Ny, Nz, delx, dely,delz);
+	                                    for (l = cx - 1; l <= cx + 1; l++) {
+						for (m = cy - 1; m <= cy + 1; m++) {
+							for (n = cz - 1; n <= cz + 1; n++) {
+                                                               
+								if (l < 1) {lp = l + Nx;dxs = -(box.xhi-box.xlo);}
+                                                                else if (l >Nx){lp=l-Nx;dxs = (box.xhi-box.xlo);} // Positive shift
+                                                                else {lp=l;dxs=0;}
+                                                                if (m < 1) {mp = m+ Ny;dys = -(box.yhi-box.ylo);}
+                                                                else if (m>Ny){mp=m-Ny;dys = (box.yhi-box.ylo);}
+                                                                else {mp=m;dys=0;}
+                                                                if (n < 1) {np = n+ Nz;dzs = -(box.zhi-box.zlo);}
+                                                                else if (n >Nz){np=n-Nz;dzs =(box.zhi-box.zlo);}
+                                                                else {np=n;dzs=0;}
+      								c= scalarcellindex(lp, mp, np, Nx, Ny, Nz);
+                                                       //   printf("%d %d %d %d %d %d %d %d\n", i,c, l, m, n,lp,mp,np);          
+       	                                                   if(cell[c]==NULL){dtemp=2;}
+                                                               head=cell[c];
+                                                               while(cell[c]){
+                                                                dx=x-(cell[c]->atom->x+dxs);
+                                                                dy=y-(cell[c]->atom->y+dys);
+                                                                dz=z-(cell[c]->atom->z+dzs);
+                                                                 d=sqrt(pow(dx,2)+pow(dy,2)+pow(dz,2));
+                                                              //  printf("%d %d %d %d %d %d %d %d\n", i,c, l, m, n,lp,mp,np);     
+                                                               dtemp=fabs(d-(rprobe+0.5*(cell[c]->atom->sigma)));
+                                                    printf("%d %d %lf %lf %lf %lf %lf\n",c,cell[c]->atom->id,cell[c]->atom->x,cell[c]->atom->y,cell[c]->atom->z,d,dtemp); 
+                                                     // printf("%lf %lf\n",d,(rprobe+0.5*(cell[c]->atom->sigma)));
+                                                              // printf("%lf %lf\n",d,(rprobe+0.5*(cell[c]->atom->sigma)));
+                                                if(dtemp<eps){
+                                                 // printf("%d %lf %lf %lf\n",i,cell[c]->atom->x,cell[c]->atom->y,cell[c]->atom->z);   
+ 
+                                                              occ=occ+1; 
+                                                  // printf("%d\n",i);
+                                                        break;
+                                                  }
+
+                                                   cell[c]=cell[c]->next;
+                                                              }                                                    
+                                                             cell[c]=head;
+                                                  if(dtemp<eps){
+                                                     
+                                                   //  printf("%lf\n",dtemp);
+                                                        break;
+                                                  }
+                                                 	}                                               
+                                                  if(dtemp<eps){
+                                                      
+                                             //        printf("%lf\n",d);
+                                                        break;
+                                                  }
+						}
+                                        if(dtemp<eps){
+                                                     
+                                               //      printf("%lf\n",d);
+                                                       break;
+                                                  }
+					}
+                                      
+
+			
+
+printf("%d\n",occ);
+return occ;
+}
+//---------------------------------------------------------------------------------------------------------------------
+
+
+

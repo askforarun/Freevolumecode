@@ -1,0 +1,76 @@
+//for (i = 0; i < ljcoeffparticle->natoms; i++) {
+                                 //printf("%d %d\n",i);
+  //                             	 for (j = 0; j < natoms; j++) {
+//                                        printf("%d\n",j);
+//                                        dx=particle->x[i]-atom->x[j];
+//                                        dy=particle->y[i]-atom->y[j];
+//                                        dz=particle->z[i]-atom->z[j];
+//                                        if (dx <= 0.5*(box.xhi-box.xlo)) {dx = dx+(box.xhi-box.xlo);}
+//                                        if (dx > 0.5*(box.xhi-box.xlo)) {dx = dx-(box.xhi-box.xlo);}
+//                                        if (dy <= 0.5*(box.yhi-box.ylo)) {dy = dy+(box.yhi-box.ylo);}
+//                                        if (dy > 0.5*(box.yhi-box.ylo)) {dy = dy-(box.yhi-box.ylo);}
+//                                        if (dz <= 0.5*(box.zhi-box.zlo)) {dz = dz+(box.zhi-box.zlo);}
+//                                        if (dz > 0.5*(box.zhi-box.zlo)) {dz = dz-(box.zhi-box.zlo);}
+//                                        r=sqrt(pow(dx,2)+pow(dy,2)+pow(dz,2));
+//                                        if(r< cutoff){
+//                                        sigma_ij = 0.5*(ljcoeffparticle->sigma[i] + lj->sigma[j]);
+//					eps_ij = sqrt(ljcoeffparticle->eps[i] * lj->eps[j]);
+//                                        delUtemp=4*eps_ij*((pow((sigma_ij/r),12)-pow((sigma_ij/r),6)));
+//-4*eps_ij*((pow((sigma_ij/cutoff),12)-pow((sigma_ij/cutoff),6)));
+                                 //    printf("%lf\n",4*eps_ij*((pow((sigma_ij/cutoff),12)-pow((sigma_ij/cutoff),6))));
+                                       
+//                                        delU=delU+delUtemp;
+//                                                  }
+                                        
+//				                                }
+//		        	}
+//return delU;
+
+//};
+ 
+
+  
+Atomparam *getparameters(FILE *fp2)
+{
+int i,j,maxtype;
+size_t nbytes = 100;
+char *my_string,str1[100], str2[100];
+Atomparam *atomparam;
+
+atomparam=(Atomparam *)malloc(sizeof(Atomparam));
+atomparam->eps = (double *) malloc(sizeof(double) * 18000);
+atomparam->sigma = (double *) malloc(sizeof(double) *18000);
+for (i = 1; i < 100; i++) {
+getline(&my_string, &nbytes, fp2);
+sscanf(my_string, "%s", str1);
+if(sscanf(my_string, "%s", str1)==1){
+if (strcmp(str1, "pair_coeff") == 0) {
+sscanf(my_string,
+			"%*s %*d %d %*[^/]%*[/]%*[^/]%*[/]%*[^/]%*[/]%*s %lf %lf",
+			&j, &atomparam->eps[i], &atomparam->sigma[i]);
+printf("%d %lf %lf\n",j,atomparam->eps[i],atomparam->sigma[i]);
+}
+}
+}
+//printf("%d\n",i);
+return atomparam; 
+}
+
+
+
+for(i=0;i<=Nx+1;i++){
+for(j=1;j<=Ny+1;j++){
+for(k=1;k<=Nz+1;k++){
+if(j==1 &&  i!=Nx+1 && i!=0 && k!=0 && k!=Nz+1)
+{
+c=scalarcellindex(i,Ny,k,Nx,Ny,Nz);
+cp=scalarcellindex(i,0,k,Nx,Ny,Nz);
+printf("%d\n",c);
+head[cp]=copylist(head[c]);
+}
+
+
+
+}
+}
+}

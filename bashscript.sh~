@@ -1,0 +1,12 @@
+#!/bin/bash
+./voidvol_n0_5_2H_temp.sh
+./voidvol_n0_3_2_temp.sh
+./voidvol_amide_temp.sh
+./voidvol_n4_temp.sh
+./voidvol_n6_temp.sh
+./voidvol_n8_temp.sh
+./voidvol_n10_temp.sh
+./voidvol_n12_temp.sh
+
+
+

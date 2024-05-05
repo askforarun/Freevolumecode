@@ -1,0 +1,204 @@
+#include "stdheader.h"
+#include "getljcoeff.h"
+#include "getboxdim.h"
+#include "cubecentres.h"
+#include "Atom.h"
+#include "sortatomscell.h"
+#include "particle.h"
+
+//  gcc widom.c getnatoms.c getljcoeff.c  gettimestep.c getboxdim.c  Atom.c cubecentres.c particle.c delU.c sortatomscell.c -lm
+ 
+//./a.out dump_0.45.lammpstrj paircoeff.txt 
+
+//function declarations-----------
+
+int getnatoms(FILE *fp, size_t nbytes, char *my_string);
+double energy_diff(Box box, int natoms, Atom **atom, double cutoff,
+		Particle *particle);
+int gettimestep(FILE *fp, size_t nbytes, char *my_string);
+
+//------------------------------------------------------------------------------
+
+FILE *fp1, *fp2;
+int natoms = 0, timestep = 0, Nx = 20, Ny = 20, Nz = 20, i = 0,j,k,counter = 0,
+		counter_frame = 0;
+int cx = 0, cy = 0, cz = 0, l, m, n, lp, mp, np,c,count,occ;
+double delx,dely,delz,dx,dy,dz;
+double delUtemp = 0, exp_minusbetadelUtemp = 0, exp_minusbetadelUframe =0, exp_minusbetadelU = 0;
+double delUtail,d,dtemp,rprobe=0,voidfrac;
+double vol, void_vol;
+Particle *water;
+Box box;
+Atom **atom;
+Centres *centre;
+Atomparam *atomparam;
+Ljcoeff *lj;
+Cell **cell;
+Cell *head;
+char str1[100], str2[100];
+size_t nbytes = 100;
+char *my_string;
+
+int main(int argc, char *argv[]) {
+	my_string = malloc(nbytes);
+	fp1 = fopen(argv[1], "r");
+	fp2 = fopen(argv[2], "r");
+	natoms = getnatoms(fp1, nbytes, my_string); //Get the number of atoms
+//printf("%d\n",natoms);
+	atomparam = getparameters(fp1, fp2, natoms);
+
+	lj = Ljcoeffs(fp1, atomparam, natoms); //Get the Ljcoefficients epsilon and sigma for each atom in the system
+	water = particleinfo(); // Get epsilon, sigma,Equilibrium position of the atoms,types of the atoms of the inserted particle-------------
+
+	rewind(fp1); //Start from begining of the dump file
+//read each line of the dump file
+	while (!feof(fp1)) {
+
+		getline(&my_string, &nbytes, fp1);
+		sscanf(my_string, "%s %s", str1, str2);
+		if (sscanf(my_string, "%s %s", str1, str2) == 2) {
+//------------------------------------------------------------------------------               
+			if (strcmp(str1, "ITEM:") == 0 && strcmp(str2, "TIMESTEP") == 0) {
+				counter = counter + 1;
+				timestep = gettimestep(fp1, nbytes, my_string);
+				//  printf("%d\n",timestep);
+			}
+			if (strcmp(str1, "ITEM:") == 0 && strcmp(str2, "BOX") == 0) {
+				box = boxdim(fp1, nbytes, my_string);
+				vol = (box.xhi - box.xlo) * (box.yhi - box.ylo)
+						* (box.zhi - box.zlo);
+				//printf("%lf\n",vol);
+			}
+//----------------Widom insertion begins here ------------------------------------------------------
+
+			if (strcmp(str1, "ITEM:") == 0 && strcmp(str2, "ATOMS") == 0) {
+				
+voidfrac=0;
+occ=0;
+//printf("%lf\n",delUtail);
+				atom = atominfo(fp1, nbytes, my_string, lj, natoms);
+
+//water=createparticle(water,1,1,4.3);//creates the particle at a desired location
+//printf("%lf\n",water->lj->eps[0]);
+//Atom sorting code should take atom and water info (ie coordinates) and sort them in boxes
+
+				
+                                delx=(box.xhi-box.xlo)/Nx;
+                                dely=(box.yhi-box.ylo)/Ny;
+                                delz=(box.zhi-box.zlo)/Nz;
+//				printf("%lf %lf %lf\n",delx,dely,delz);
+				cell = sortatomscell(atom, natoms, box, Nx, Ny, Nz, delx, dely,delz);
+				centre = cubecentres(box, Nx, Ny, Nz);
+				for (i = 14; i <15; i++) {
+                                       //   printf("%d\n",i);
+					cx = ceil((centre->xc[i] - box.xlo) / delx);
+					cy = ceil((centre->yc[i] - box.ylo) / dely);
+					cz = ceil((centre->zc[i] - box.zlo) / delz);
+                                       printf("%lf %lf %lf\n",centre->xc[i] ,centre->yc[i],centre->zc[i]);
+
+ 
+					for (l = cx - 1; l <= cx + 1; l++) {
+						for (m = cy - 1; m <= cy + 1; m++) {
+							for (n = cz - 1; n <= cz + 1; n++) {
+                                                              //    printf("%d %d %d %d %d\n", i,c, lp, mp, np);
+								if (l < 1) {lp = l + Nx;}
+                                                                else if (l >Nx){lp=l-Nx;}
+                                                                else {lp=l;}
+                                                                if (m < 1) {mp = m+ Ny;}
+                                                                else if (m>Ny){mp=m-Ny;}
+                                                                else {mp=m;}
+                                                                if (n < 1) {np = n+ Nz;}
+                                                                else if (n >Nz){np=n-Nz;}
+                                                                else {np=n;}
+      								c= scalarcellindex(lp, mp, np, Nx, Ny, Nz);
+                                                            // printf("%d %d %d %d %d %d %d %d\n", i,c, l, m, n,lp,mp,np);          
+       	                                                  
+                                                               head=cell[c];
+                                                               while(cell[c]){
+                                                                dx=centre->xc[i]-cell[c]->atom->x;
+                                                                dy=centre->yc[i]-cell[c]->atom->y;
+                                                                dz=centre->zc[i]-cell[c]->atom->z;
+                                               
+                                                               if (dx <= 0.5*(box.xhi-box.xlo)) {dx = dx+(box.xhi-box.xlo);}
+                                                               if (dx > 0.5*(box.xhi-box.xlo)) {dx = dx-(box.xhi-box.xlo);}
+                                                                if (dy <= 0.5*(box.yhi-box.ylo)) {dy = dy+(box.yhi-box.ylo);}
+                                                                if (dy > 0.5*(box.yhi-box.ylo)) {dy = dy-(box.yhi-box.ylo);}
+                                                                if (dz <= 0.5*(box.zhi-box.zlo)) {dz = dz+(box.zhi-box.zlo);}
+                                                                if (dz > 0.5*(box.zhi-box.zlo)) {dz = dz-(box.zhi-box.zlo);}
+                                                                 d=sqrt(pow(dx,2)+pow(dy,2)+pow(dz,2));
+                                                                 //   printf("%lf %lf\n",d,0.5*cell[c]->atom->sigma);
+                                                               dtemp=d-(rprobe+0.5*(cell[c]->atom->sigma));
+                                                if(dtemp<0.0001){
+                                                              occ=occ+1; 
+                                                     //printf("%lf\n",d);
+                                                        break;
+                                                  }
+
+                                                   cell[c]=cell[c]->next;
+                                                              }                                                    
+                                                             cell[c]=head;
+                                                  if(dtemp<0.0001){
+                                                     
+                                                     //printf("%lf\n",d);
+                                                        break;
+                                                  }
+                                                 	}                                               
+                                                  if(dtemp<0.0001){
+                                                      
+                                             //        printf("%lf\n",d);
+                                                        break;
+                                                  }
+						}
+                                        if(dtemp<0.0001){
+                                                     
+                                               //      printf("%lf\n",d);
+                                                       break;
+                                                  }
+					}
+
+
+
+
+
+
+				}
+
+
+voidfrac=(double) ((Nx*Ny*Nz)-occ)/(Nx*Ny*Nz);
+printf("%lf %d\n",voidfrac,occ);
+//for (i=0; i<(Nx*Ny*Nz);i++){
+				water = createparticle(water, centre->xc[1], centre->yc[1],centre->zc[1]);
+
+//delUtemp=energy_diff(box,natoms, atom, rc, water);
+//printf("%lf\n",delUtemp);
+//exp_minusbetadelUtemp=exp(-(1/T)*delUtemp);
+//if(exp_minusbetadelUtemp >= epsilon){
+//counter_frame=counter_frame+1;
+//exp_minusbetadelUframe=exp_minusbetadelUframe+exp_minusbetadelUtemp;
+//                                    }
+//                           }
+//void_vol=(double)(counter_frame/(double)(Nx*Ny*Nz));
+//exp_minusbetadelUframe=exp_minusbetadelUframe/(Nx*Ny*Nz);
+//delUtemp=energy_diff(box, atom, rc, water);
+//printf("%lf\n",delUtemp);
+
+				free_atom(atom, natoms);
+				free_cubecentres(centre);
+				exp_minusbetadelU = exp_minusbetadelU + exp_minusbetadelUframe;
+				exp_minusbetadelUframe = 0;
+				counter_frame = 0;
+//free_particle(water);
+			}
+//---------------------Widom insertion ends here---------------------
+
+		}
+
+	}
+	// printf("%lf %d\n",-log(exp_minusbetadelU/counter)+2*ecor,counter);
+	free_getljcoeff(lj);
+	free(my_string);
+	free_getparameters(atomparam);
+	fclose(fp1);
+	fclose(fp2);
+	return 0;
+}

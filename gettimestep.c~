@@ -1,0 +1,10 @@
+#include "stdheader.h"
+int gettimestep(FILE *fp)
+{
+int timestep;
+getline(&my_string, &nbytes, fp);
+sscanf(my_string, "%d", &timestep);
+
+return timestep;
+}
+

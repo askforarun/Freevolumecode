@@ -1,0 +1,16 @@
+#ifndef GETBOXDIM_H
+#define GETBOXDIM_H
+#include "stdheader.h"
+typedef struct {
+double xlo;
+double xhi;
+double ylo;
+double yhi;
+double zlo;
+double zhi;
+} Box;
+Box boxdim(FILE *fp);
+#endif
+
+
+

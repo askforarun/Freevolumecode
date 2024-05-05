@@ -1,0 +1,17 @@
+#include "stdheader.h"
+int getnatoms(FILE *fp, char *my_string, size_t nbytes) {
+int i,natoms;
+char str1[100], str2[100];
+		for (i = 0; i < 5; i++) {
+			getline(&my_string, &nbytes, fp);
+			sscanf(my_string, "%s %s", str1, str2);
+			if (strcmp(str1, "ITEM:") == 0 && strcmp(str2, "NUMBER") == 0) {
+				getline(&my_string, &nbytes, fp);
+				sscanf(my_string, "%d", &natoms);
+			}
+		}
+		return natoms;
+                
+	}
+
+

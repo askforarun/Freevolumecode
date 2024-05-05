@@ -1,0 +1,20 @@
+#ifndef SORTATOMSCELL_H
+#define SORTATOMSCELL_H
+typedef struct _cell{
+Atom *atom;
+struct _cell *next;
+}Cell;
+
+#define scalarcellindex(cx,cy,cz,Nx,Ny,Nz) (cx+cy*(Nx+2)+cz*(Nx+2)*(Ny+2));
+#define Nx(xhi,xlo,rc) (floor(xhi-xlo)/rc);
+#define Ny(yhi,ylo,rc) (floor(yhi-ylo)/rc);
+#define Nz(zhi,zlo,rc) (floor(zhi-zlo)/rc);
+#define delx(xhi,xlo,Nx) ((xhi-xlo)/Nx);
+#define dely(yhi,ylo,Ny) ((yhi-ylo)/Ny);
+#define delz(zhi,zlo,Nz) ((zhi-zlo)/Nz);
+
+
+Cell **sortatomscell(Atom **atom,int natoms,Box box,int Nx, int Ny, int Nz,double delx, double dely, double delz);
+#endif 
+
+

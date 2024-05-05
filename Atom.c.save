@@ -1,0 +1,65 @@
+#include "stdheader.h"
+#include "Atom.h"
+#include "getboxdim.h"
+
+
+Atom *atominfo(FILE *fp1,size_t nbytes,char *my_string,Ljcoeff *lj, int natoms) {
+			
+                                int i;
+                         	Atom *atom=(Atom *) malloc(sizeof(Atom));
+                                atom->id = (int *) malloc(sizeof(int) * natoms);
+				atom->x = (double *) malloc(sizeof(double) * natoms);
+				atom->y = (double *) malloc(sizeof(double) * natoms);
+				atom->z = (double *) malloc(sizeof(double) * natoms);
+				atom->q = (double *) malloc(sizeof(double) * natoms);
+                                atom->eps=(double *) malloc(sizeof(double) * natoms);
+                                atom->sigma=(double *) malloc(sizeof(double) * natoms);
+                                atom->natoms=natoms;
+				for (i = 0; i < natoms; i++) {
+                                        atom->eps[i]=lj->eps[i];
+                                        atom->sigma[i]=lj->sigma[i];      
+					getline(&my_string, &nbytes, fp1);
+					sscanf(my_string, "%d %*d %lf %lf %lf %lf\n",  &atom->id[i], &atom->x[i],
+							&atom->y[i], &atom->z[i], &atom->q[i]);
+//                       				printf("%d %lf %lf %lf %lf\n",atom->id[i],atom->x[i],atom->y[i],atom->z[i],atom->q[i]);
+				}                              
+				return atom;
+                              
+			
+}
+
+void cell(Atom *atom){
+
+
+int i,j;
+typedef struct _cell{
+Atom *atom;
+struct cell *next;
+}cell;
+
+cell **head, **curr;
+
+head = (cell **)malloc(sizeof(cell *) * 100);
+curr= (cell **)malloc(sizeof(cell *)*100);
+
+for(i=1;i<=10;i++){
+head[i]=NULL;
+for (j=1;j<10;j++){
+curr[j]=(Atom *)malloc(sizeof(Atom) *100)
+}
+}
+}
+
+
+		
+void free_atom(Atom *atom)
+{
+free(atom->x);
+free(atom->y);
+free(atom->z);
+free(atom->q);
+free(atom->eps);
+free(atom->id);
+free(atom->sigma);
+free(atom);
+}

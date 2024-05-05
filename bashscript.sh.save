@@ -1,0 +1,23 @@
+#!/bin/bash 
+array=(amide)
+replicas=(1)
+#temp=(500 470 440 410 380 350 320 290 260 230 200)
+temp=(500)
+for i in "${array[@]}"
+do
+for j in "${replicas[@]}"
+do
+for k in "${temp[@]}"
+do
+var1="crosslink_"
+var2="r$j"
+var3=/home/arun/${var1}${i}/${var1}${i}_${var2}
+echo $var3/dumpfiles/dump_${k}.lammpstrj 
+echo $var3/allcoeffs_equalreactivity.txt
+echo $k
+./a.out $var3/dumpfiles/dump_${k}.lammpstrj  $var3/allcoeffs_equalreactivity.txt 0.8 3.4 > void_${k}.txt
+done
+done
+done
+exit 130
+

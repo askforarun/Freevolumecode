@@ -1,0 +1,17 @@
+pair_coeff 1 1 lj/cut/coul/cut 1    2 #c3
+pair_coeff 2 2 lj/cut/coul/cut 3    4  #hc
+
+bond_coeff 	1	harmonic	303.1	1.535
+bond_coeff 	2	harmonic	323.5	1.513
+bond_coeff 	3	harmonic	303.1	1.535
+bond_coeff 	4	harmonic	323.5	1.513
+
+angle_coeff 	1	harmonic	63.84	120.6301
+angle_coeff 	2	harmonic	63.84	120.6301
+angle_coeff 	3	harmonic	63.84	120.6301
+angle_coeff 	4	harmonic	63.84	120.6301
+angle_coeff 	5	harmonic	63.25	112.09
+angle_coeff 	6	harmonic	63.21	110.63
+
+
+
