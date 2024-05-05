@@ -40,5 +40,5 @@ The output is 8 columns
 7. Number of cubic free cells
 8. Total number of cells
 
-The code can also outputs x,y,z coordinates of the centers of the free volume cubelets but I have supressed it. 
+The code has the capability to output x,y,z coordinates of the centers of the free volume cubelets but I have supressed it. 
 
