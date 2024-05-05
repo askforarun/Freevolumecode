@@ -16,6 +16,7 @@ Each cell is designated a by a scalar and a vector (vector and mapped to a scala
 Compile as 
 
 gcc widom.c getnatoms.c getljcoeff.c  gettimestep.c getboxdim.c  Atom.c cubecentres.c particle.c delU.c sortatomscell.c min.c -o void
+
 Use as 
 
 ./void  dump_300.lammpstrj allcoeffs_equalreactivity.txt 0.7 4
