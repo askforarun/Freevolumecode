@@ -7,7 +7,7 @@ Unfortunately I did not have time to format the code but works.
 Innerworkings of the code:
 
 The soratomcell.c is the crux of the code which sorts atoms in the cells. 
-The main function is called widom.c but does not do any widom insertion. The entire free volume was a part of free energy code that I wrote. 
+The main function is called widom.c but does not do any widom insertion. The entire free volume code was written as a part of free energy code that I wrote. 
 The number of atoms in each cell can be queried by modifying sortatomcells.c
 Each cell is identified by a scalar value (c in the code) and a vector, cx,cy,cz 
 When looping periodic boundary conditions/minimum image conventions are taken into account. 
