@@ -1,6 +1,5 @@
 # Freevolumecode
-Calculation of free volume using hard sphere probe technique. This code was used in 10.1039/D1SM01825F and was written aroun 2018. 
-This uses a linked cell framework and is implemented using linked lists in C programming language. 
+Calculation of free volume using hard sphere probe technique. This code was used in 10.1039/D1SM01825F and was written around 2018 while I was pHD student. This uses a linked cell framework and is implemented using linked lists in C programming language. 
 Unfortunately I did not have time to format the code but works. 
 
 
