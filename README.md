@@ -19,8 +19,9 @@ gcc widom.c getnatoms.c getljcoeff.c  gettimestep.c getboxdim.c  Atom.c cubecent
 
 Use as 
 
-./void  dump_2.lammpstrj allcoeffs_equalreactivity.txt 1.4 7
+./void  dump_300.lammpstrj allcoeffs_equalreactivity.txt 1.4 7
 
+You can get the dumpfile from https://zenodo.org/records/11125570
 
 
 The input for the code 
