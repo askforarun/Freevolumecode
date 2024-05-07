@@ -21,9 +21,12 @@ Use as
 
 ./void  dump_2.lammpstrj allcoeffs_equalreactivity.txt 1.4 7
 
+
+
 The input for the code 
 1) native lammps trajectories (i.e., dump files),
 2) txt file containing atom diameters. The format of the text file is
+   
    pair_coeff 1 1 lj/cut/coul/long 0.1094 3.39966950842 # c3
 
 4) probe raidus and
