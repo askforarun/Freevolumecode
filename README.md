@@ -31,7 +31,7 @@ The input for the code
    pair_coeff 1 1 lj/cut/coul/long 0.1094 3.39966950842 # c3
 
 4) probe raidus and
-5) the maximum LJ diamter of the atoms in the system (increasing this number will increase the number of neighbour cells scanned and hence will increase the compuational cost)
+5) the maximum LJ diameter of the atoms in the system (increasing this number will increase the number of neighbour cells scanned and hence will increase the compuational cost)
 
 The output is 8 columns
 
